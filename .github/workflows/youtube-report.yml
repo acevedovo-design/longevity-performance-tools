@@ -18,9 +18,13 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run YouTube report
-        env:
-          API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-          CHANNEL_ID: UCoxEzjSLMSFEyoQacaZJ2A
-        run: |
-          python youtube_weekly_report.py
+- name: Run YouTube report
+  env:
+    API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+    CHANNEL_ID: UCoxEzjSLMSFEyoQacaZJ2A
+  run: |
+    mkdir -p reports
+    python youtube_weekly_report.py \
+      --api-key "$API_KEY" \
+      --channel-id "$CHANNEL_ID" \
+      --output reports/youtube_weekly_report.csv
