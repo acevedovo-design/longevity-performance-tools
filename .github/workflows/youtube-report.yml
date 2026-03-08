@@ -28,3 +28,8 @@ jobs:
             --api-key "$API_KEY" \
             --channel-id "$CHANNEL_ID" \
             --output reports/youtube_weekly_report.csv
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: youtube-weekly-report
+          path: reports/youtube_weekly_report.csv
