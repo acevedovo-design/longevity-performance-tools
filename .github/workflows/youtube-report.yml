@@ -5,6 +5,9 @@ on:
     - cron: "0 12 * * 1"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   youtube-report:
     runs-on: ubuntu-latest
@@ -20,7 +23,11 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run YouTube report
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Run channel weekly report
         env:
           API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           CHANNEL_ID: UCoxEzjSJLMSFEyoQacaZJ2A
@@ -31,17 +38,30 @@ jobs:
             --channel-id "$CHANNEL_ID" \
             --output reports/youtube_weekly_report.csv
 
+      - name: Run video weekly report
+        env:
+          API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          CHANNEL_ID: UCoxEzjSJLMSFEyoQacaZJ2A
+        run: |
+          python youtube_video_weekly_report.py
+
       - name: Commit updated state
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .youtube_report_state.json || true
-          git commit -m "Update YouTube report state" || echo "No changes"
+          git commit -m "Update YouTube report state" || echo "No changes to commit"
           git push
 
-      - name: Upload report artifact
+      - name: Upload channel report artifact
         uses: actions/upload-artifact@v4
         with:
           name: youtube-weekly-report
           path: reports/youtube_weekly_report.csv
+
+      - name: Upload video report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: youtube-video-report
+          path: reports/youtube_video_report.csv
           
