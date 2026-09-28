@@ -247,6 +247,14 @@
       "total_likes": 4425,
       "total_comments": 489,
       "subscriber_count": 1980
+    },
+    {
+      "captured_at_utc": "2026-09-28T19:15:39Z",
+      "videos_tracked": 220,
+      "total_views": 197255,
+      "total_likes": 4493,
+      "total_comments": 500,
+      "subscriber_count": 1990
     }
   ]
 }
